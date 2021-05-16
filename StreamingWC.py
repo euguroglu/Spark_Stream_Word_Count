@@ -5,7 +5,7 @@ if __name__ == "__main__":
     spark = SparkSession \
         .builder.appName("Streaming Word Count") \
         .config("spark.streaming.stopGracefullyOnShutdown", "true") \
-        .config("local[*]") \
+        .master("local[*]") \
         .getOrCreate()
 
 ## Read
