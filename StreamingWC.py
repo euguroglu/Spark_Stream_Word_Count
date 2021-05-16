@@ -1,12 +1,16 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import expr
 
+from lib.logger import Log4j
+
 if __name__ == "__main__":
     spark = SparkSession \
         .builder.appName("Streaming Word Count") \
         .config("spark.streaming.stopGracefullyOnShutdown", "true") \
-        .master("local[*]") \
+        .master("yarn") \
         .getOrCreate()
+
+    logger = Log4j(spark)
 
 ## Read
 ## Reading data from port 9999
@@ -27,8 +31,9 @@ if __name__ == "__main__":
 ## Sink it into console
     word_count_query = counts_df.writeStream \
         .format("console") \
-        .option("checkpointLocation", "chk-point-dir") \
+        .option("checkpointLocation", "WC_Example/chk-point-dir") \
         .outputMode("complete") \
         .start()
-
+        
+    logger.info("Listening to localhost:9999")
     word_count_query.awaitTermination()
