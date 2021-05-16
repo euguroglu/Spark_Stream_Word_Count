@@ -25,8 +25,8 @@ if __name__ == "__main__":
 
 ## Sink
 ## Sink it into console
-    word_count_query = counts_df.writeStream. \
-        format("console") \
+    word_count_query = counts_df.writeStream \
+        .format("console") \
         .option("checkpointLocation", "chk-point-dir") \
         .outputMode("complete") \
         .start()
